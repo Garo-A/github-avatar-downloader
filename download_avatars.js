@@ -8,10 +8,16 @@ var GITHUB_USER = "Garo-A";
 var GITHUB_TOKEN = "a78268fdb4405dfd0d89420a01fb5fbdd79eaae0";
 
 
+function printUser(array){
+  for(var i = 0; i < array.length; i++) {
+    console.log(array[i].avatar_url);
+  }
+}
+
 
 function getRepoContributors(repoOwner, repoName, cb){
 
-
+  var data = "";
   var options = {
     url: 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
     headers: {
@@ -19,18 +25,17 @@ function getRepoContributors(repoOwner, repoName, cb){
     }
   }
 
-  request.get(options) //REQUEST STARTS HERE
+  request.get(options, function(error,response,body){ //REQUEST STARTS HERE
+    if(error){
+      throw error;
+    }
 
-    .on('error', function(err){ //handles Errors
-      throw err;
-    })
+    console.log("Response Code: ", response.statusCode);
+    console.log("Response Message: ", response.statusMessage);
 
-    .on('response', function(response){ //Shows me if my response went through, and if it didn't, which code and message.
-      console.log("Response Code: ", response.statusCode);
-      console.log("Response Message: ", response.statusMessage);
-    })
+    cb(JSON.parse(body));
 
+  })
 }
-
-getRepoContributors('jquery','jquery');
+getRepoContributors('jquery','jquery', printUser);
 
