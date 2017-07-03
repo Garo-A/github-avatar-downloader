@@ -1,5 +1,7 @@
 var request = require('request');
 var fs = require('fs');
+require('dotenv').config();
+
 
 console.log("Welcome to the GitHub Avatar Downloader!");
 
@@ -9,8 +11,10 @@ var owner = args[0];
 var repo = args[1];
 
 
-var GITHUB_USER = "Garo-A";
-var GITHUB_TOKEN = "a78268fdb4405dfd0d89420a01fb5fbdd79eaae0";
+var user = process.env.GITHUB_USER;
+var token = process.env.GITHUB_TOKEN;
+
+console.log(user, token);
 
 
 function printUser(array){ //CALLBACK -- Takes JSON array, goes through array creating image URL and then passes that thorugh downloader. Also setsd filepath as login
@@ -42,7 +46,7 @@ function getRepoContributors(repoOwner, repoName, cb){
 
   else {
     var options = {
-      url: 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
+      url: 'https://'+ user + ':' + token + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
       headers: {
         'User-Agent': 'request'
       }
@@ -55,6 +59,7 @@ function getRepoContributors(repoOwner, repoName, cb){
       // Following code is to see if there is an error getting the response and what code and message it returns
       console.log("Response Code: ", response.statusCode);
       console.log("Response Message: ", response.statusMessage);
+
 
       // callback function actually executing the entire thing. Will take JSON object and feed it into callback as an array.
       cb(JSON.parse(body));
