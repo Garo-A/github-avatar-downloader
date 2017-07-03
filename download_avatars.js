@@ -8,9 +8,10 @@ var GITHUB_USER = "Garo-A";
 var GITHUB_TOKEN = "a78268fdb4405dfd0d89420a01fb5fbdd79eaae0";
 
 
-function printUser(array){
+function printUser(array){ //CALLBACK -- Takes JSON array, goes through array creating image URL and then passes that thorugh downloader/
   for(var i = 0; i < array.length; i++) {
-    console.log(array[i].avatar_url + array[i].login);
+    var path = array[i].login;
+    downloadImageByURL(array[i].avatar_url + "avatars/" + array[i].login + ".jpg", path);
   }
 }
 
@@ -33,6 +34,7 @@ function getRepoContributors(repoOwner, repoName, cb){
     console.log("Response Code: ", response.statusCode);
     console.log("Response Message: ", response.statusMessage);
 
+
     cb(JSON.parse(body)); //THIS BASICALLY GENERATES THE URL
   })
 }
@@ -41,11 +43,9 @@ getRepoContributors('jquery','jquery', printUser);
 
 
 
-// function downloadImageByURL (url, filepath) {
+function downloadImageByURL (url, filepath) { //DOWNLOADER -- Takes a given URL and fwets into it, gets image, downloads it using login as name.
 
-//   request.get(url)
+  request.get(url)
 
-//     .pipe(fs.createWriteStream('./kvirani'));
-// }
-
-// downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg");
+    .pipe(fs.createWriteStream('./'+ filepath + '.jpg'));
+}
